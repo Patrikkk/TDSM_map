@@ -6,6 +6,8 @@ using System.IO;
 using Terraria;
 using TShockAPI;
 using System;
+using Microsoft.Xna.Framework;
+using Color = Microsoft.Xna.Framework.Color;
 
 namespace Map
 {
@@ -34,7 +36,7 @@ namespace Map
                     y2 = Main.maxTilesY;
             }
 			Stopwatch stopwatch = new Stopwatch ();
-            utils.SendLogs("Saving Image...", Color.WhiteSmoke);
+			TShock.Utils.SendLogs("Saving Image...", Color.WhiteSmoke);
 			stopwatch.Start ();
 
             try
@@ -85,11 +87,11 @@ namespace Map
 						
 					}
 				}
-                utils.SendLogs("Saving Data...", Color.WhiteSmoke);
+				TShock.Utils.SendLogs("Saving Data...", Color.WhiteSmoke);
 				bmp.Save (string.Concat (p, Path.DirectorySeparatorChar, filename));
 				stopwatch.Stop ();
-                utils.SendLogs("Save duration: " + stopwatch.Elapsed.Seconds + " Second(s)", Color.WhiteSmoke);
-                utils.SendLogs("Saving Complete.", Color.WhiteSmoke);
+				TShock.Utils.SendLogs("Save duration: " + stopwatch.Elapsed.Seconds + " Second(s)", Color.WhiteSmoke);
+				TShock.Utils.SendLogs("Saving Complete.", Color.WhiteSmoke);
 				bmp = null;
                 isMapping = false;
 		}

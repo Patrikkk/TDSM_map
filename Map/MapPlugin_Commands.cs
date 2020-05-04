@@ -24,7 +24,6 @@ namespace Map
         public bool api_call;
         public static bool generate_tiles;
 
-		private TShockAPI.Utils utils = TShockAPI.Utils.Instance;
 		
 		public void MapCommand(CommandArgs argzz)
 		{
@@ -283,7 +282,7 @@ namespace Map
 
         public bool highlightsearch(TSPlayer player, string nameOrID)
         {
-            List<Terraria.Item> itemlist = utils.GetItemByIdOrName(nameOrID);
+            List<Terraria.Item> itemlist = TShock.Utils.GetItemByIdOrName(nameOrID);
 
             if (itemlist != null && itemlist.Count > 0)
             {

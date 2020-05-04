@@ -6,6 +6,10 @@ using System.IO;
 using System;
 using System.Threading;
 using Terraria;
+using TShockAPI;
+using Microsoft.Xna.Framework;
+using Color = Microsoft.Xna.Framework.Color;
+using Terraria.Map;
 
 namespace Map
 {
@@ -123,7 +127,7 @@ namespace Map
             Stopwatch stopwatch = new Stopwatch();
             if(!api_call)
             {
-                utils.SendLogs("Saving Image...", Color.WhiteSmoke);
+				TShock.Utils.SendLogs("Saving Image...", Color.WhiteSmoke);
                 stopwatch.Start();
             }
 
@@ -133,8 +137,8 @@ namespace Map
             }
             catch (ArgumentException e)
             {
-                utils.SendLogs("<map> ERROR: could not create initial Bitmap object.", Color.Red);
-                utils.SendLogs(e.StackTrace.ToString(), Color.WhiteSmoke);
+				TShock.Utils.SendLogs("<map> ERROR: could not create initial Bitmap object.", Color.Red);
+				TShock.Utils.SendLogs(e.StackTrace.ToString(), Color.WhiteSmoke);
                 stopwatch.Stop();
                 isMapping = false;
                 return;
@@ -165,8 +169,8 @@ namespace Map
                     }
                     catch (KeyNotFoundException e)
                     {
-                        utils.SendLogs("<map> ERROR: could not fade the dimmed background from rock to hell.", Color.Red);
-                        utils.SendLogs(e.StackTrace.ToString()+", with key " + (FADE_START_INDEX + (y + y1)).ToString(), Color.WhiteSmoke);
+						TShock.Utils.SendLogs("<map> ERROR: could not fade the dimmed background from rock to hell.", Color.Red);
+						TShock.Utils.SendLogs(e.StackTrace.ToString()+", with key " + (FADE_START_INDEX + (y + y1)).ToString(), Color.WhiteSmoke);
                         //continue and see if we keep getting errors when painting the actual world
                     }
                 }
@@ -181,8 +185,8 @@ namespace Map
                 }
                 catch (KeyNotFoundException e)
                 {
-                    utils.SendLogs("<map> ERROR: could not paint the background.", Color.Red);
-                    utils.SendLogs(e.StackTrace.ToString(), Color.WhiteSmoke);
+					TShock.Utils.SendLogs("<map> ERROR: could not paint the background.", Color.Red);
+					TShock.Utils.SendLogs(e.StackTrace.ToString(), Color.WhiteSmoke);
                 }
 
                 try
@@ -199,8 +203,8 @@ namespace Map
                 }
                 catch (KeyNotFoundException e)
                 {
-                    utils.SendLogs("<map> ERROR: could not fade the background from rock to hell.", Color.Red);
-                    utils.SendLogs(e.StackTrace.ToString() + ", with key " + (FADE_START_INDEX + (y + y1)).ToString(), Color.WhiteSmoke);
+					TShock.Utils.SendLogs("<map> ERROR: could not fade the background from rock to hell.", Color.Red);
+					TShock.Utils.SendLogs(e.StackTrace.ToString() + ", with key " + (FADE_START_INDEX + (y + y1)).ToString(), Color.WhiteSmoke);
 
                     //continue and see if we keep getting errors when painting the actual world
                 }
@@ -238,8 +242,8 @@ namespace Map
                 part3.Abort();
                 part4.Abort();
 
-                utils.SendLogs("<map> ERROR: not enough memory to start mapping threads.", Color.Red);
-                utils.SendLogs(e.StackTrace.ToString(), Color.WhiteSmoke);
+				TShock.Utils.SendLogs("<map> ERROR: not enough memory to start mapping threads.", Color.Red);
+				TShock.Utils.SendLogs(e.StackTrace.ToString(), Color.WhiteSmoke);
 
                 //for memory's sake
                 piece1.Dispose();
@@ -264,8 +268,8 @@ namespace Map
             }
             catch (ArgumentException e)
             {
-                utils.SendLogs("<map> ERROR: could not create final Bitmap object.", Color.Red);
-                utils.SendLogs(e.StackTrace.ToString(), Color.WhiteSmoke);
+				TShock.Utils.SendLogs("<map> ERROR: could not create final Bitmap object.", Color.Red);
+				TShock.Utils.SendLogs(e.StackTrace.ToString(), Color.WhiteSmoke);
                 stopwatch.Stop();
                 isMapping = false;
                 return;
@@ -304,12 +308,12 @@ namespace Map
 
             if (pixelfailureflag)
             {
-                utils.SendLogs("<map> WARNING: pixel fail write on hlchests.", Color.Yellow);
+				TShock.Utils.SendLogs("<map> WARNING: pixel fail write on hlchests.", Color.Yellow);
                 pixelfailureflag = false;
             }
             if (!api_call)
             {
-                utils.SendLogs("Saving Data...", Color.WhiteSmoke);
+				TShock.Utils.SendLogs("Saving Data...", Color.WhiteSmoke);
                 if (generate_tiles)
                 {
                     //create directory and make sure it's empty.
@@ -505,10 +509,10 @@ namespace Map
                         }
                         countx++;
                     }*/
-                    string html = "<html>\r\n<head>\r\n<link rel=\"stylesheet\" href=\"http://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.css\"/>\r\n<title>Terraria world</title>\r\n</head>\r\n<body>\r\n<div id=\"map\" style=\"height: 100%;\"></div>\r\n<script src=\"http://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.js\"></script>\r\n<script>\r\n\tvar map = L.map('map', {\r\n\t\tmaxZoom: 18,\r\n\t\tminZoom: 16,\r\n\t\tcrs: L.CRS.Simple\r\n\t}).setView([0, 0], 18);\r\n\tvar southWest = map.unproject([0, " + Main.maxTilesY + "], map.getMaxZoom());\r\n\tvar northEast = map.unproject([" + Main.maxTilesX + ", 0], map.getMaxZoom());\r\n\tmap.setMaxBounds(new L.LatLngBounds(southWest, northEast));\r\n\t\tL.tileLayer('map-tiles/map_{z}_{x}_{y}.png', {\r\n\t\tattribution: 'Imagery : <a href=\"http://github.com/elevatorguy/TDSM_map/tree/tshock\">Map</a>, using <a href=\"https://github.com/mrkite/TerraFirma\">Terrafirma</a> colorscheme.',\r\n\t}).addTo(map);\r\n</script>\r\n</body>\r\n</html>\r\n";
-                    System.IO.File.WriteAllText(string.Concat(p, Path.DirectorySeparatorChar, "map", Path.DirectorySeparatorChar, "map.html"), html);
+                    string html = "<html>\r\n<head>\r\n<link rel=\"stylesheet\" href=\"https://unpkg.com/leaflet@1.6.0/dist/leaflet.css\"/>\r\n<title>Terraria world</title>\r\n</head>\r\n<body>\r\n<div id=\"map\" style=\"height: 100%;\"></div>\r\n<script src=\"https://unpkg.com/leaflet@1.6.0/dist/leaflet.js\"></script>\r\n<script>\r\n\tvar map = L.map('map', {\r\n\t\tmaxZoom: 18,\r\n\t\tminZoom: 16,\r\n\t\tmaximumAge: 1000000,\r\n\t\tcrs: L.CRS.Simple\r\n\t}).setView([0, 0], 18);\r\n\tvar southWest = map.unproject([0, " + Main.maxTilesY + "], map.getMaxZoom());\r\n\tvar northEast = map.unproject([" + Main.maxTilesX + ", 0], map.getMaxZoom());\r\n\tmap.setMaxBounds(new L.LatLngBounds(southWest, northEast));\r\n\t\tL.tileLayer('map-tiles/map_{z}_{x}_{y}.png', {\r\n\t\tattribution: 'Imagery : <a href=\"http://github.com/elevatorguy/TDSM_map/tree/tshock\">Map</a>, using <a href=\"https://github.com/mrkite/TerraFirma\">Terrafirma</a> colorscheme.',\r\n\t}).addTo(map);\r\n</script>\r\n</body>\r\n</html>\r\n";
+                    System.IO.File.WriteAllText(string.Concat(p, Path.DirectorySeparatorChar, "map", Path.DirectorySeparatorChar, "index.html"), html);
                     watch.Stop();
-                    utils.SendLogs("Saved " + filecount + " file(s) in " + watch.Elapsed.Seconds + "." + (watch.ElapsedMilliseconds - 1000 * watch.Elapsed.Seconds) + "s", Color.WhiteSmoke);
+					TShock.Utils.SendLogs("Saved " + filecount + " file(s) in " + watch.Elapsed.Seconds + "." + (watch.ElapsedMilliseconds - 1000 * watch.Elapsed.Seconds) + "s", Color.WhiteSmoke);
                 }
                 else
                 {
@@ -517,8 +521,8 @@ namespace Map
                     bmp = null;
                 }
                 stopwatch.Stop();
-                utils.SendLogs("Total duration: " + stopwatch.Elapsed.Seconds + " Second(s)", Color.WhiteSmoke);
-                utils.SendLogs("Saving Complete.", Color.WhiteSmoke);
+				TShock.Utils.SendLogs("Total duration: " + stopwatch.Elapsed.Seconds + " Second(s)", Color.WhiteSmoke);
+				TShock.Utils.SendLogs("Saving Complete.", Color.WhiteSmoke);
             }
             piece1.Dispose();
             piece1 = null;
@@ -651,12 +655,12 @@ namespace Map
                         //draws tiles or walls
                         if (Main.tile[i, j].wall == 0)
                         {
-                            if (Main.tile[i, j].active())
-                            {
-                                SetPixel(bmp, x - piece, j - ymin, DimColorDefs[Main.tile[i, j].type], false);
-                                tempColor = DimUInt32Defs[Main.tile[i, j].type];
-                            }
-                            else
+							if (Main.tile[i, j].active())
+							{
+								SetPixel(bmp, x - piece, j - ymin, DimColorDefs[Main.tile[i, j].type], false);
+								tempColor = DimUInt32Defs[Main.tile[i, j].type];
+							}
+							else
                             {
                                 tempColor = DimUInt32Defs[j + FADE_START_INDEX];
                             }
@@ -733,8 +737,8 @@ namespace Map
             }
             catch (KeyNotFoundException e)
             {
-                utils.SendLogs("<map> ERROR: Problem with pixel lookup at (x,y): (" + i + "," + j + "). Key: " + e.Data.Keys.ToString(), Color.Red);
-                utils.SendLogs(e.StackTrace.ToString(), Color.WhiteSmoke);
+				TShock.Utils.SendLogs("<map> ERROR: Problem with pixel lookup at (x,y): (" + i + "," + j + "). Key: " + e.Data.Keys.ToString(), Color.Red);
+				TShock.Utils.SendLogs(e.StackTrace.ToString(), Color.WhiteSmoke);
 
                 //continue and see how many pixels are bad...
                 //this might be a new item added to the game that we havn't added to the plugin yet.
@@ -742,7 +746,7 @@ namespace Map
 
             if(pixelfailureflag)
             {
-                utils.SendLogs("<map> WARNING: Could not draw certain pixel at row (" + i + ",y).", Color.Yellow);
+				TShock.Utils.SendLogs("<map> WARNING: Could not draw certain pixel at row (" + i + ",y).", Color.Yellow);
                 pixelfailureflag = false;
             }
 
